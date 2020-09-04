@@ -1,0 +1,133 @@
+version: '3.1'
+
+services:
+
+  z1:
+    image: zookeeper
+    hostname: z1
+    container_name: z1
+    ports:
+      - 2181:2181
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181 server.2=z2:2888:3888;2181 server.3=z3:2888:3888;2181
+
+  z2:
+    image: zookeeper
+    hostname: z2
+    container_name: z2
+    ports:
+      - 2182:2181
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=z1:2888:3888;2181 server.2=0.0.0.0:2888:3888;2181 server.3=z3:2888:3888;2181
+
+  z3:
+    image: zookeeper
+    hostname: z3
+    container_name: z3
+    ports:
+      - 2183:2181
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=z1:2888:3888;2181 server.2=z2:2888:3888;2181 server.3=0.0.0.0:2888:3888;2181
+
+  k1:
+    image: confluentinc/cp-kafka
+    hostname: k1
+    container_name: k1
+    depends_on:
+      - z1
+      - z2
+      - z3
+    ports:
+      - "9192:9192"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'z1:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://k1:9092,PLAINTEXT_HOST://localhost:9192
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  k2:
+    image: confluentinc/cp-kafka
+    hostname: k2
+    container_name: k2
+    depends_on:
+      - z1
+      - z2
+      - z3
+    ports:
+      - "9292:9292"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: 'z1:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://k2:9092,PLAINTEXT_HOST://localhost:9292
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  k3:
+    image: confluentinc/cp-kafka
+    hostname: k3
+    container_name: k3
+    depends_on:
+      - z1
+      - z2
+      - z3
+    ports:
+      - "9392:9392"
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: 'z1:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://k3:9092,PLAINTEXT_HOST://localhost:9392
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  k4:
+    image: confluentinc/cp-kafka
+    hostname: k4
+    container_name: k4
+    depends_on:
+      - z1
+      - z2
+      - z3
+    ports:
+      - "9492:9492"
+    environment:
+      KAFKA_BROKER_ID: 4
+      KAFKA_ZOOKEEPER_CONNECT: 'z1:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://k4:9092,PLAINTEXT_HOST://localhost:9492
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  k5:
+    image: confluentinc/cp-kafka
+    hostname: k5
+    container_name: k5
+    depends_on:
+      - z1
+      - z2
+      - z3
+    ports:
+      - "9592:9592"
+    environment:
+      KAFKA_BROKER_ID: 5
+      KAFKA_ZOOKEEPER_CONNECT: 'z1:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://k5:9092,PLAINTEXT_HOST://localhost:9592
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0

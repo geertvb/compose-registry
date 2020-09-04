@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+
+  oradb:
+    image: store/oracle/database-enterprise:12.2.0.1-slim
+    container_name: oradb
+    hostname: oradb
+    ports:
+      - "1521:1521"
+    environment:
+      DB_SID: orcl
+      DB_PDB: pdb1
+      DB_DOMAIN: localdomain
+      DB_PASSWD: Welc0me1!
+      DB_MEMORY: 16Gi
+      DB_BUNDLE: basic
